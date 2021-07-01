@@ -39,21 +39,23 @@ else()
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wall -O2 -Wformat")
 endif()
 	set(GTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../googletest)
-	include_directories(${GTEST_DIR})
+	set(GTEST_BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../build/googletest)
+	include_directories(${GTEST_DIR} ${GTEST_BUILD_DIR})
 
 	# include
 	set(GTEST_INCLUDE_DIR ${GTEST_DIR}/include)
 	include_directories(${GTEST_INCLUDE_DIR})
 
 	# library
+if (WIN32)
 	set(GTEST_LIB ${CMAKE_CURRENT_BINARY_DIR}/../googletest/gtest.dir/${CMAKE_CFG_INTDIR}/gtest-all.obj)
-	target_link_libraries(MyTest PRIVATE ${GTEST_LIB})
-
-	# main
-#	set(GTEST_MAIN ${CMAKE_CURRENT_BINARY_DIR}/../googletest/${CMAKE_CFG_INTDIR}/gtest_main)
-#	target_link_libraries(MyTest PRIVATE ${GTEST_MAIN})
+	set(GTEST_MAIN ${CMAKE_CURRENT_BINARY_DIR}/../googletest/${CMAKE_CFG_INTDIR}/gtest_main)
+else()
+    set(GTEST_LIB ${CMAKE_CURRENT_BINARY_DIR}/../build/googletest/libgtest.a)
+    set(GTEST_MAIN ${CMAKE_CURRENT_BINARY_DIR}/../build/googletest/libgtest_main.a)
 endif()
-
+	target_link_libraries(MyTest PRIVATE ${GTEST_LIB} ${GTEST_MAIN})
+endif()
 
 if (WIN32)
     set_target_properties(MyTest PROPERTIES LINK_FLAGS /SUBSYSTEM:CONSOLE)
