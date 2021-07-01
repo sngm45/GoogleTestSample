@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS OFF) 
 
 set(CMAKE_VERBOSE_MAKEFILE 1)
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE "Debug")
 
 # set parameter
 option(ENABLE_GTEST "Use gtest." OFF)
