@@ -16,6 +16,8 @@ set(MyTest_CONFIGURATION_IN ${CMAKE_CURRENT_SOURCE_DIR}/include/config.h.in)
 set(MyTest_CONFIGURATION ${CMAKE_CURRENT_BINARY_DIR}/include/config.h)
 configure_file( ${MyTest_CONFIGURATION_IN} ${MyTest_CONFIGURATION} )
 
+find_package(Threads REQUIRED)
+
 add_executable(MyTest
 	${MyTest_src}
 	${MyTest_test}
@@ -54,7 +56,7 @@ else()
     set(GTEST_LIB ${CMAKE_CURRENT_BINARY_DIR}/../googletest/libgtest.a)
     set(GTEST_MAIN ${CMAKE_CURRENT_BINARY_DIR}/../googletest/libgtest_main.a)
 endif()
-	target_link_libraries(MyTest PRIVATE ${GTEST_LIB} ${GTEST_MAIN})
+	target_link_libraries(MyTest PRIVATE ${GTEST_LIB} ${GTEST_MAIN} Threads::Threads)
 endif()
 
 if (WIN32)
