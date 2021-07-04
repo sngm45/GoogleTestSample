@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 project(MyTest)
 
 ####################################################
@@ -34,14 +34,14 @@ target_link_libraries(MyTest PRIVATE MyApp)
 
 ####################################################
 # link google test
-if(DEFINED ENABLE_GTEST)
-if (WIN32)
+#if(DEFINED ENABLE_GTEST)
+  if (MSVC)
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /NODEFAULTLIB:MSVCRT:lib")
-else()
+  else()
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS}  -Wall -O2 -Wformat")
-endif()
+  endif()
 	set(GTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../googletest)
-	set(GTEST_BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../build/googletest)
+	set(GTEST_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/../googletest)
 	include_directories(${GTEST_DIR} ${GTEST_BUILD_DIR})
 
 	# include
@@ -49,20 +49,20 @@ endif()
 	include_directories(${GTEST_INCLUDE_DIR})
 
 	# library
-if (WIN32)
+  if (MSVC)
 	set(GTEST_LIB ${CMAKE_CURRENT_BINARY_DIR}/../googletest/gtest.dir/${CMAKE_CFG_INTDIR}/gtest-all.obj)
 	set(GTEST_MAIN ${CMAKE_CURRENT_BINARY_DIR}/../googletest/${CMAKE_CFG_INTDIR}/gtest_main)
-else()
-    set(GTEST_LIB ${CMAKE_CURRENT_BINARY_DIR}/../googletest/libgtest.a)
-    set(GTEST_MAIN ${CMAKE_CURRENT_BINARY_DIR}/../googletest/libgtest_main.a)
-endif()
+  else()
+	set(GTEST_LIB ${CMAKE_CURRENT_BINARY_DIR}/../googletest/libgtest.a)
+	set(GTEST_MAIN ${CMAKE_CURRENT_BINARY_DIR}/../googletest/libgtest_main.a)
+  endif()
 	target_link_libraries(MyTest PRIVATE ${GTEST_LIB} ${GTEST_MAIN} Threads::Threads)
-endif()
+#endif()
 
-if (WIN32)
-    set_target_properties(MyTest PROPERTIES LINK_FLAGS /SUBSYSTEM:CONSOLE)
-endif()
+  if (MSVC)
+	set_target_properties(MyTest PROPERTIES LINK_FLAGS /SUBSYSTEM:CONSOLE)
+  endif()
 
 add_test(NAME MyTest 
-  COMMAND MyTest
+	COMMAND MyTest
 )
