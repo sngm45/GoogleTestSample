@@ -18,6 +18,8 @@ configure_file( ${MyTest_CONFIGURATION_IN} ${MyTest_CONFIGURATION} )
 
 find_package(Threads REQUIRED)
 
+enable_testing()
+
 add_executable(MyTest
 	${MyTest_src}
 	${MyTest_test}
@@ -56,7 +58,8 @@ target_link_libraries(MyTest PRIVATE MyApp)
 	set(GTEST_LIB ${CMAKE_CURRENT_BINARY_DIR}/../googletest/libgtest.a)
 	set(GTEST_MAIN ${CMAKE_CURRENT_BINARY_DIR}/../googletest/libgtest_main.a)
   endif()
-	target_link_libraries(MyTest PRIVATE ${GTEST_LIB} ${GTEST_MAIN} Threads::Threads)
+#	target_link_libraries(MyTest PRIVATE ${GTEST_LIB} ${GTEST_MAIN} Threads::Threads)
+        target_link_libraries(MyTest PRIVATE gtest_main Threads::Threads)
 #endif()
 
   if (MSVC)
@@ -66,3 +69,6 @@ target_link_libraries(MyTest PRIVATE MyApp)
 add_test(NAME MyTest 
 	COMMAND MyTest
 )
+
+include(GoogleTest)
+gtest_discover_tests(MyTest)

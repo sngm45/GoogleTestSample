@@ -1,8 +1,8 @@
 /**********************************************************
  * @file main.cpp
  * @brief main function for gtest
- * @author ngmrsng
- * @date 2016/07/11
+ * @author sngm45
+ * @date 2021/08/27
  *********************************************************/
 
 #include <config.h>
@@ -28,15 +28,15 @@ int main(int argc, char **argv)
 	//! result of test
 	int lResult = 0;
 
-#ifdef ENABLE_GTEST
+#if defined(ENABLE_GTEST)
 	::testing::InitGoogleTest(&argc, argv);
 #endif
 
-#ifdef ENABLE_GMOCK
+#if defined(ENABLE_GMOCK)
 	::testing::InitGoogleMock(&argc, argv);
 #endif
 
-#ifdef ENABLE_GTEST || ENABLE_GMOCK
+#if defined(ENABLE_GTEST) || defined(ENABLE_GMOCK)
 	lResult =  RUN_ALL_TESTS();
 #endif
 
